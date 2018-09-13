@@ -9,6 +9,11 @@ namespace Markup\RabbitMq\ManagementApi\Api;
  */
 class Queue extends AbstractApi
 {
+    const ACK = 'ack_requeue_false';
+    const ACK_REQUEUE = 'ack_requeue_true';
+    const NACK = 'reject_requeue_false';
+    const NACK_REQUEUE = 'reject_requeue_true';
+
     /**
      * A list of all queues.
      *
@@ -105,7 +110,7 @@ class Queue extends AbstractApi
      * count controls the number of messages to get. You may get fewer messages than this if the queue cannot
      * immediately provide them.
      *
-     * requeue determines whether the messages will be removed from the queue. If requeue is true they will be
+     * ackmode determines whether the messages will be removed from the queue. If ackmode is true they will be
      * requeued - but their position in the queue may change and their redelivered flag will be set.
      *
      * encoding must be either "auto" (in which case the payload will be returned as a string if it is valid UTF-8, and
@@ -122,16 +127,16 @@ class Queue extends AbstractApi
      * @param  string       $vhost
      * @param  string       $name
      * @param  integer      $count
-     * @param  bool         $requeue
+     * @param  string       $ack_mode
      * @param  string       $encoding
      * @param  null|integer $truncate
      * @return array
      */
-    public function retrieveMessages($vhost, $name, $count = 5, $requeue = true, $encoding = 'auto', $truncate = null)
+    public function retrieveMessages($vhost, $name, $count = 5, $ack_mode = self::ACK, $encoding = 'auto', $truncate = null)
     {
         $parameters = [
             'count' => $count,
-            'requeue' => $requeue,
+            'ackmode' => $ack_mode,
             'encoding' => $encoding,
         ];
 
